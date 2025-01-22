@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EVOffice_BE", "EVOffice_BE\EVOffice_BE.csproj", "{C29E2F78-1C15-4A8C-8A2C-DA4D67A9DE12}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTierArchitecture", "NTierArchitecture\NTierArchitecture.csproj", "{C29E2F78-1C15-4A8C-8A2C-DA4D67A9DE12}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
