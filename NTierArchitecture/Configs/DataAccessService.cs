@@ -6,9 +6,9 @@ using NTierArchitecture.Infrastructures.Repositories;
 using NTierArchitecture.Infrastructures.Repositories.Impl;
 using NTierArchitecture.Modules.User.Config;
 
-namespace NTierArchitecture;
+namespace NTierArchitecture.Configs;
 
-public static class DataAccessDependencyInjection
+public static class DataAccessService
 {
     public static IServiceCollection AddDataAccess(this IServiceCollection services, IConfiguration configuration)
     {
@@ -16,35 +16,25 @@ public static class DataAccessDependencyInjection
 
         services.AddIdentity();
 
-        services.AddRepositories();
-
-        services.AddUnitOfWorks();
+        services.AddInfrastructure();
 
         return services;
     }
 
-    private static void AddRepositories(this IServiceCollection services)
+    private static void AddInfrastructure(this IServiceCollection services)
     {
-        services.AddScoped<ITodoItemRepository, TodoItemRepository>();
-        services.AddScoped<ITodoListRepository, TodoListRepository>();
-    }
-
-    private static void AddUnitOfWorks(this IServiceCollection services)
-    {
+        services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
         services.AddScoped<IUnitOfWork, UnitOfWork>();
     }
 
     private static void AddDatabase(this IServiceCollection services, IConfiguration configuration)
     {
-        var databaseConfig = configuration.GetSection("Database").Get<DatabaseConfiguration>();
+        var connectionString = configuration.GetValue<string>("Database:ConnectionString");
+        Console.WriteLine($"Connection String: {connectionString}");
 
-        services.AddDbContext<DatabaseContext>(options =>
-            options.UseMySql(databaseConfig?.ConnectionString,
-                ServerVersion.AutoDetect(databaseConfig?.ConnectionString),
-                opt =>
-                    opt
-                        .MigrationsAssembly(typeof(DatabaseContext).Assembly.FullName)
-                        .UseNewtonsoftJson()));
+        services.AddDbContext<DatabaseContext>(option => option.UseMySql(connectionString,
+            ServerVersion.AutoDetect(connectionString),
+            opt => opt.MigrationsAssembly(typeof(DatabaseContext).Assembly.FullName).UseNewtonsoftJson()));
     }
 
     private static void AddIdentity(this IServiceCollection services)
@@ -70,10 +60,4 @@ public static class DataAccessDependencyInjection
             options.User.RequireUniqueEmail = true;
         });
     }
-}
-
-// TODO move outside?
-public class DatabaseConfiguration
-{
-    public string ConnectionString { get; set; }
 }

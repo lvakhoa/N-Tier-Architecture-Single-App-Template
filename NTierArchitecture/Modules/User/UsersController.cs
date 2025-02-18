@@ -20,13 +20,13 @@ public class UsersController : ApiController
     [AllowAnonymous]
     public async Task<IActionResult> LoginAsync(LoginUserModel loginUserModel)
     {
-        return Ok(ApiResult<LoginResponseModel>.Success(await _userService.LoginAsync(loginUserModel)));
+        return Ok(ApiResult<LoginResponseModel>.Success(StatusCodes.Status200OK, await _userService.LoginAsync(loginUserModel)));
     }
 
     [HttpPut("{id:guid}/changePassword")]
     public async Task<IActionResult> ChangePassword(Guid id, ChangePasswordModel changePasswordModel)
     {
-        return Ok(ApiResult<BaseResponseModel>.Success(
+        return Ok(ApiResult<BaseResponseModel>.Success(StatusCodes.Status200OK,
             await _userService.ChangePasswordAsync(id, changePasswordModel)));
     }
 }

@@ -32,7 +32,7 @@ public class TodoItemService : ITodoItemService
         CancellationToken cancellationToken = default)
     {
         var todoListSpec = TodoListSpecification.GetTodoListByIdSpec(createTodoItemModel.TodoListId);
-        var todoList = await _unitOfWork.Repository<Entities.Domain.TodoList>().GetFirstAsync(todoListSpec);
+        var todoList = await _unitOfWork.Repository<Entities.Domain.TodoList>().GetFirstOrThrowAsync(todoListSpec);
         var todoItem = _mapper.Map<Entities.Domain.TodoItem>(createTodoItemModel);
 
         todoItem.List = todoList;
@@ -50,7 +50,7 @@ public class TodoItemService : ITodoItemService
         CancellationToken cancellationToken = default)
     {
         var todoItemSpec = TodoItemSpecification.GetTodoItemByIdSpec(id);
-        var todoItem = await _unitOfWork.Repository<Entities.Domain.TodoItem>().GetFirstAsync(todoItemSpec);
+        var todoItem = await _unitOfWork.Repository<Entities.Domain.TodoItem>().GetFirstOrThrowAsync(todoItemSpec);
 
         _mapper.Map(updateTodoItemModel, todoItem);
 
@@ -67,7 +67,7 @@ public class TodoItemService : ITodoItemService
     public async Task<BaseResponseModel> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var todoItemSpec = TodoItemSpecification.GetTodoItemByIdSpec(id);
-        var todoItem = await _unitOfWork.Repository<Entities.Domain.TodoItem>().GetFirstAsync(todoItemSpec);
+        var todoItem = await _unitOfWork.Repository<Entities.Domain.TodoItem>().GetFirstOrThrowAsync(todoItemSpec);
 
         var deletedTodoItem = await _unitOfWork.Repository<Entities.Domain.TodoItem>().DeleteAsync(todoItem);
 

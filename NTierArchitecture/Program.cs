@@ -2,10 +2,13 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 
 using NTierArchitecture;
+using NTierArchitecture.Configs;
 using NTierArchitecture.Database;
+using NTierArchitecture.Exceptions;
 using NTierArchitecture.Filters;
 using NTierArchitecture.Middleware;
 using NTierArchitecture.Modules;
+using NTierArchitecture.Shared;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,18 +16,17 @@ builder.Services.AddControllers(
     config => config.Filters.Add(typeof(ValidateModelAttribute))
 );
 
-builder.Services.AddFluentValidationAutoValidation();
-builder.Services.AddValidatorsFromAssemblyContaining(typeof(IModuleMarker));
+builder.Services.AddConfig(builder.Configuration);
 
-builder.Services.AddSwagger();
+builder.Services.AddSharedService(builder.Environment);
 
-builder.Services.AddDataAccess(builder.Configuration)
-    .AddApplication(builder.Environment)
-    .AddSharedService(builder.Environment);
-
-builder.Services.AddJwt(builder.Configuration);
+builder.Services.AddAppDependency(builder.Environment);
 
 builder.Services.AddEmailConfiguration(builder.Configuration);
+
+builder.Services.AddExceptionHandler<ExceptionHandler>();
+
+builder.Services.AddProblemDetails();
 
 var app = builder.Build();
 
@@ -53,9 +55,9 @@ app.UseMiddleware<PerformanceMiddleware>();
 
 app.UseMiddleware<TransactionMiddleware>();
 
-app.UseMiddleware<ExceptionHandlingMiddleware>();
-
 app.MapControllers();
+
+app.UseExceptionHandler();
 
 app.Run();
 

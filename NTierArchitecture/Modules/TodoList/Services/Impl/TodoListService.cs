@@ -49,7 +49,7 @@ public class TodoListService : ITodoListService
     public async Task<UpdateTodoListResponseModel> UpdateAsync(Guid id, UpdateTodoListModel updateTodoListModel)
     {
         var todoListSpec = TodoListSpecification.GetTodoListByIdSpec(id);
-        var todoList = await _unitOfWork.Repository<Entities.Domain.TodoList>().GetFirstAsync(todoListSpec);
+        var todoList = await _unitOfWork.Repository<Entities.Domain.TodoList>().GetFirstOrThrowAsync(todoListSpec);
 
         var userId = ParseGuidString.ParseGuid(_claimService.GetUserId());
 
@@ -70,7 +70,7 @@ public class TodoListService : ITodoListService
     public async Task<BaseResponseModel> DeleteAsync(Guid id)
     {
         var todoListSpec = TodoListSpecification.GetTodoListByIdSpec(id);
-        var todoList = await _unitOfWork.Repository<Entities.Domain.TodoList>().GetFirstAsync(todoListSpec);
+        var todoList = await _unitOfWork.Repository<Entities.Domain.TodoList>().GetFirstOrThrowAsync(todoListSpec);
 
         var deletedTodoList = await _unitOfWork.Repository<Entities.Domain.TodoList>().DeleteAsync(todoList);
 

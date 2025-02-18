@@ -20,20 +20,20 @@ public class TodoItemsController : ApiController
     [HttpPost]
     public async Task<IActionResult> CreateAsync(CreateTodoItemModel createTodoItemModel)
     {
-        return Ok(ApiResult<CreateTodoItemResponseModel>.Success(
+        return Ok(ApiResult<CreateTodoItemResponseModel>.Success(StatusCodes.Status201Created,
             await _todoItemService.CreateAsync(createTodoItemModel)));
     }
 
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateAsync(Guid id, UpdateTodoItemModel updateTodoItemModel)
     {
-        return Ok(ApiResult<UpdateTodoItemResponseModel>.Success(
+        return Ok(ApiResult<UpdateTodoItemResponseModel>.Success(StatusCodes.Status200OK,
             await _todoItemService.UpdateAsync(id, updateTodoItemModel)));
     }
 
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteAsync(Guid id)
     {
-        return Ok(ApiResult<BaseResponseModel>.Success(await _todoItemService.DeleteAsync(id)));
+        return Ok(ApiResult<BaseResponseModel>.Success(StatusCodes.Status200OK, await _todoItemService.DeleteAsync(id)));
     }
 }

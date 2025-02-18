@@ -17,8 +17,9 @@
 ### 🌲 **Project tree**
 
 ```
-EVOffice_BE
+NTierArchitecture
     ├── Common
+    ├── Configs
     ├── Database
     │   └── Migrations
     ├── Entities
@@ -34,14 +35,13 @@ EVOffice_BE
     │   └── Specifications
     ├── Middleware
     ├── Modules
-    │   └── User
-    │   │   ├── Config
+    │   ├── TodoItem
     │   │   ├── MappingProfiles
     │   │   ├── Models
     │   │   ├── Services
     │   │   └── Validators
     ├── Properties
-    │   └── launchSettings.json
+    │   ├── launchSettings.json
     └── Shared
 ```
 

@@ -9,10 +9,10 @@ namespace NTierArchitecture.Infrastructures.Repositories.Impl;
 
 public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : BaseEntity
 {
-    protected readonly DatabaseContext Context;
-    protected readonly DbSet<TEntity> DbSet;
+    private readonly DatabaseContext Context;
+    private readonly DbSet<TEntity> DbSet;
 
-    protected BaseRepository(DatabaseContext context)
+    public BaseRepository(DatabaseContext context)
     {
         Context = context;
         DbSet = context.Set<TEntity>();
@@ -22,12 +22,17 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         return await ApplySpecification(spec).ToListAsync();
     }
 
-    public async Task<TEntity> GetFirstAsync(ISpecification<TEntity> spec)
+    public async Task<TEntity> GetFirstOrThrowAsync(ISpecification<TEntity> spec)
     {
         var entity = await ApplySpecification(spec).FirstOrDefaultAsync();
 
         if (entity == null) throw new ResourceNotFoundException(typeof(TEntity));
 
+        return entity;
+    }
+
+    public async Task<TEntity?> GetFirstAsync(ISpecification<TEntity> spec)
+    {
         return await ApplySpecification(spec).FirstOrDefaultAsync();
     }
 

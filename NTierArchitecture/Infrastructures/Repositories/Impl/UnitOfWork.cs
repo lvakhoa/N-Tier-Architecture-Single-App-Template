@@ -5,7 +5,7 @@ namespace NTierArchitecture.Infrastructures.Repositories.Impl;
 
 public class UnitOfWork : IUnitOfWork
 {
-    protected readonly DatabaseContext _dbContext;
+    private readonly DatabaseContext _dbContext;
     private readonly IDictionary<Type, dynamic> _repositories;
 
     public UnitOfWork(DatabaseContext dbContext)
@@ -25,7 +25,7 @@ public class UnitOfWork : IUnitOfWork
 
         var repositoryType = typeof(BaseRepository<>);
 
-        var repository = Activator.CreateInstance(repositoryType.MakeGenericType(typeof(T)), _dbContext);
+        var repository = Activator.CreateInstance(repositoryType.MakeGenericType(entityType), _dbContext);
 
         if (repository == null)
         {

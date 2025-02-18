@@ -5,7 +5,9 @@ namespace NTierArchitecture.Infrastructures.Repositories;
 
 public interface IBaseRepository<TEntity> where TEntity : BaseEntity
 {
-    Task<TEntity> GetFirstAsync(ISpecification<TEntity> spec);
+    Task<TEntity> GetFirstOrThrowAsync(ISpecification<TEntity> spec);
+
+    Task<TEntity?> GetFirstAsync(ISpecification<TEntity> spec);
 
     Task<List<TEntity>> GetAllAsync(ISpecification<TEntity> spec);
 
